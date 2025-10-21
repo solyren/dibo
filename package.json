@@ -1,0 +1,31 @@
+{
+  "name": "dibo",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "setup": "bun src/setup.ts",
+    "start": "bun src/index.ts",
+    "dev": "nodemon --exec bun src/index.ts",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
+    "eslint": "^9.38.0",
+    "nodemon": "^3.1.10"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@types/node": "^24.9.1",
+    "baileys-mod": "^6.8.5",
+    "cheerio": "^1.1.2",
+    "form-data": "^4.0.4",
+    "jimp": "^0.16.13",
+    "pino": "^10.1.0"
+  }
+}
