@@ -1,7 +1,7 @@
 {
   "packages": {
     ".": {
-      "package-name": "dino",
+      "package-name": "dibo",
       "release-type": "node",
       "changelog-sections": [
         { "type": "feat", "section": "Features", "hidden": false },
