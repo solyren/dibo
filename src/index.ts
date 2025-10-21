@@ -2,9 +2,12 @@ import makeWASocket, { DisconnectReason, useMultiFileAuthState, fetchLatestBaile
 import { Boom } from '@hapi/boom';
 import pino from 'pino';
 import { handleCommand } from './handlers/commandHandler';
+import { db } from './services/database';
 
 // -- startBot --
 const startBot = async (): Promise<void> => {
+  db.initialize();
+  
   const { state, saveCreds } = await useMultiFileAuthState('auth_info');
   const { version } = await fetchLatestBaileysVersion();
 
