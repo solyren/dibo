@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="https://cdn.discordapp.com/attachments/1049576536807845954/1430525796916789319/Picsart_25-10-22_18-55-09-676.jpg?ex=68fa1877&is=68f8c6f7&hm=856d442cbdd2a3580bc628a6292c4ba1d3154daa4771c2fcf23f5f8be6ebc543&" alt="Dibo Bot Banner" width="100%">
+</div>
+
 # Dibo - WhatsApp Bot
 
 <div align="center">
