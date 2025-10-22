@@ -30,7 +30,6 @@ class DatabaseService {
     
     try {
       await this.redis.sadd('bot:access:users', userJid);
-      console.log(`✅ Access granted to: ${userJid}`);
       return true;
     } catch (error) {
       console.error('❌ Error adding access:', error);
@@ -44,7 +43,6 @@ class DatabaseService {
     
     try {
       await this.redis.srem('bot:access:users', userJid);
-      console.log(`✅ Access removed from: ${userJid}`);
       return true;
     } catch (error) {
       console.error('❌ Error removing access:', error);

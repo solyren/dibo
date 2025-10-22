@@ -1,8 +1,13 @@
-import makeWASocket, { DisconnectReason, useMultiFileAuthState, fetchLatestBaileysVersion } from 'baileys-mod';
+import makeWASocket, { DisconnectReason, useMultiFileAuthState, fetchLatestBaileysVersion, makeInMemoryStore } from 'baileys-mod';
 import { Boom } from '@hapi/boom';
 import pino from 'pino';
 import * as readline from 'readline';
 import { config } from './config';
+
+// -- Message store untuk caching --
+const store = makeInMemoryStore({
+  logger: pino().child({ level: 'silent', stream: 'store' }),
+});
 
 // -- createReadlineInterface --
 const createReadlineInterface = (): readline.Interface => {
@@ -37,7 +42,17 @@ const setupPairingCode = async (): Promise<void> => {
     generateHighQualityLinkPreview: true,
     syncFullHistory: false,
     markOnlineOnConnect: true,
+    getMessage: async (key) => {
+      if (store) {
+        const msg = await store.loadMessage(key.remoteJid, key.id);
+        return msg?.message || undefined;
+      }
+      return undefined;
+    },
   });
+
+  // Bind store ke socket
+  store.bind(sock.ev);
 
   if (config.usePairingCode && !sock.authState.creds.registered) {
     const phoneNumber = await question('Please enter your mobile phone number:\n');

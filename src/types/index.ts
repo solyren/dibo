@@ -1,6 +1,6 @@
 import type { WASocket } from 'baileys-mod';
 
-export type CommandRole = 'normal' | 'admin' | 'owner';
+export type CommandRole = 'normal' | 'akses' | 'admin' | 'owner';
 
 export interface Command {
   name: string;

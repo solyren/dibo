@@ -30,8 +30,6 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
       text: text,
       mentions: participants,
     });
-
-    console.log('✅ Hidetag sent successfully!');
   } catch (error) {
     console.error('❌ Error sending hidetag:', error);
     await sock.sendMessage(jid, {
@@ -42,6 +40,6 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
 
 export const hidetagCommand: Command = {
   name: 'hidetag',
-  role: 'admin',
+  role: 'akses',
   execute,
 };

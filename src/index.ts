@@ -1,8 +1,13 @@
-import makeWASocket, { DisconnectReason, useMultiFileAuthState, fetchLatestBaileysVersion } from 'baileys-mod';
+import makeWASocket, { DisconnectReason, useMultiFileAuthState, fetchLatestBaileysVersion, makeInMemoryStore } from 'baileys-mod';
 import { Boom } from '@hapi/boom';
 import pino from 'pino';
 import { handleCommand } from './handlers/commandHandler';
 import { db } from './services/database';
+
+// -- Message store untuk caching --
+const store = makeInMemoryStore({
+  logger: pino().child({ level: 'silent', stream: 'store' }),
+});
 
 // -- startBot --
 const startBot = async (): Promise<void> => {
@@ -20,39 +25,34 @@ const startBot = async (): Promise<void> => {
     generateHighQualityLinkPreview: true,
     syncFullHistory: false,
     markOnlineOnConnect: true,
+    getMessage: async (key) => {
+      if (store) {
+        const msg = await store.loadMessage(key.remoteJid, key.id);
+        return msg?.message || undefined;
+      }
+      return undefined;
+    },
   });
+
+  // Bind store ke socket untuk auto-sync messages
+  store.bind(sock.ev);
 
   sock.ev.on('creds.update', saveCreds);
 
-  sock.ev.on('group-participants.update', async (update) => {
-    console.log('👥 Group participants update:', update);
-  });
-
-  sock.ev.on('messages.upsert', async ({ messages, type }) => {
-    const msg = messages[0];
-    console.log('📨 Message received:', JSON.stringify(msg, null, 2));
-    console.log('From me:', msg.key.fromMe);
-    console.log('Has message:', !!msg.message);
-    console.log('Message type:', type);
-    
-    if (!msg.key.fromMe) {
-      if (msg.message) {
-        console.log('✅ Processing message...');
-        await handleCommand(sock, msg);
-      } else if (msg.messageStubType) {
-        const isGroup = msg.key.remoteJid?.endsWith('@g.us');
-        console.log('⚠️ Message encryption error detected!');
-        console.log(`Group: ${isGroup ? 'Yes' : 'No'}`);
-        console.log('Stub type:', msg.messageStubType);
-        console.log('Error:', msg.messageStubParameters?.[0]);
+  sock.ev.on('messages.upsert', async ({ messages }) => {
+    try {
+      for (const msg of messages) {
+        // Skip messages from bot itself
+        if (msg.key.fromMe) continue;
         
-        if (isGroup) {
-          console.log('\n🔧 FIX: Bot needs to re-join the group to fix encryption keys');
-          console.log('   1. Remove bot from group');
-          console.log('   2. Wait 30 seconds');
-          console.log('   3. Add bot back to group\n');
-        }
+        // Only process if there's actual message content (conversation or extended)
+        const hasText = msg.message?.conversation || msg.message?.extendedTextMessage?.text;
+        if (!hasText) continue;
+        
+        await handleCommand(sock, msg);
       }
+    } catch (error) {
+      console.error('❌ Error processing message:', error);
     }
   });
 
