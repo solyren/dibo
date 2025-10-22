@@ -2,23 +2,91 @@ import type { WASocket } from 'baileys-mod';
 import type { Command } from '../../types';
 import { db } from '../../services/database';
 
+const USERS_PER_PAGE = 5;
+
 // -- execute --
-const execute = async (sock: WASocket, msg: any, _args: string[]): Promise<void> => {
+const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> => {
   const jid = msg.key.remoteJid;
 
   try {
     const users = await db.listAccess();
 
-    let responseText: string;
-
     if (users.length === 0) {
-      responseText = '📋 *Access List*\n\nNo users with special access.';
-    } else {
-      const userList = users.map((user, index) => `${index + 1}. ${user}`).join('\n');
-      responseText = `📋 *Access List*\n\nUsers with special access:\n${userList}\n\nTotal: ${users.length} user(s)`;
+      await sock.sendMessage(jid, {
+        text: '📋 *Access List*\n\nNo users with special access.',
+      });
+      return;
     }
 
-    await sock.sendMessage(jid, { text: responseText });
+    // Parse page number from args or default to 1
+    let page = 1;
+    if (args.length > 0) {
+      const parsedPage = parseInt(args[0], 10);
+      if (!isNaN(parsedPage) && parsedPage > 0) {
+        page = parsedPage;
+      }
+    }
+
+    const totalPages = Math.ceil(users.length / USERS_PER_PAGE);
+
+    // Ensure page is within bounds
+    if (page > totalPages) {
+      page = totalPages;
+    }
+
+    const startIndex = (page - 1) * USERS_PER_PAGE;
+    const endIndex = Math.min(startIndex + USERS_PER_PAGE, users.length);
+    const pageUsers = users.slice(startIndex, endIndex);
+
+    // Build user list text
+    const userList = pageUsers
+      .map((user, index) => `${startIndex + index + 1}. ${user}`)
+      .join('\n');
+
+    const messageText = `📋 *Access List*\n\nUsers with special access:\n${userList}\n\n*Page ${page}/${totalPages}* • Total: ${users.length} user(s)`;
+
+    // Build interactive buttons
+    const interactiveButtons = [];
+
+    // Add Previous button if not on first page
+    if (page > 1) {
+      interactiveButtons.push({
+        name: 'quick_reply',
+        buttonParamsJson: JSON.stringify({
+          display_text: '◀ Previous',
+          id: `.listakses ${page - 1}`,
+        }),
+      });
+    }
+
+    // Add Refresh button
+    interactiveButtons.push({
+      name: 'quick_reply',
+      buttonParamsJson: JSON.stringify({
+        display_text: '🔄 Refresh',
+        id: `.listakses ${page}`,
+      }),
+    });
+
+    // Add Next button if not on last page
+    if (page < totalPages) {
+      interactiveButtons.push({
+        name: 'quick_reply',
+        buttonParamsJson: JSON.stringify({
+          display_text: 'Next ▶',
+          id: `.listakses ${page + 1}`,
+        }),
+      });
+    }
+
+    // Send interactive message with buttons
+    const interactiveMessage = {
+      text: messageText,
+      footer: 'Click buttons to navigate',
+      interactiveButtons,
+    };
+
+    await sock.sendMessage(jid, interactiveMessage);
   } catch (error) {
     console.error('❌ Error in listakses command:', error);
     try {

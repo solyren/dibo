@@ -19,6 +19,7 @@ Production-ready WhatsApp bot with 4-level role system and Redis-powered access 
 
 - **4-Level Role System** - Normal, Akses, Admin, Owner with granular permissions
 - **Redis Access Control** - Persistent user permissions via Upstash Redis
+- **Interactive Buttons** - Pagination with interactive buttons for better UX
 - **Production Ready** - TypeScript strict mode, error handling, auto-reconnect
 - **Message Store** - Proper encryption handling, no re-join required after pairing
 

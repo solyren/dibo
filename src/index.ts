@@ -45,6 +45,32 @@ const startBot = async (): Promise<void> => {
         // Skip messages from bot itself
         if (msg.key.fromMe) {continue;}
 
+        // Handle interactive button response
+        if (msg.message?.interactiveResponseMessage) {
+          const buttonResponse = msg.message.interactiveResponseMessage;
+          const buttonId = buttonResponse.nativeFlowResponseMessage?.paramsJson;
+
+          if (buttonId) {
+            try {
+              const parsedResponse = JSON.parse(buttonId);
+              const commandText = parsedResponse.id;
+
+              // Create a synthetic message for command handling
+              const syntheticMsg = {
+                ...msg,
+                message: {
+                  conversation: commandText,
+                },
+              };
+
+              await handleCommand(sock, syntheticMsg);
+            } catch (parseError) {
+              console.error('❌ Error parsing button response:', parseError);
+            }
+          }
+          continue;
+        }
+
         // Only process if there's actual message content (conversation or extended)
         const hasText = msg.message?.conversation || msg.message?.extendedTextMessage?.text;
         if (!hasText) {continue;}
