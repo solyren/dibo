@@ -6,30 +6,37 @@ import { db } from '../../services/database';
 const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> => {
   const jid = msg.key.remoteJid;
 
-  if (args.length === 0) {
-    await sock.sendMessage(jid, {
-      text: '❌ Usage: .addakses <number>\n\nExample: .addakses 628123456789',
-    });
-    return;
-  }
+  try {
+    if (args.length === 0) {
+      await sock.sendMessage(jid, {
+        text: '❌ Usage: .addakses <number>\n\nExample: .addakses 628123456789',
+      });
+      return;
+    }
 
-  let targetJid = args[0];
-  
-  if (!targetJid.includes('@')) {
-    targetJid = targetJid.replace(/[^0-9]/g, '');
-    targetJid = `${targetJid}@s.whatsapp.net`;
-  }
+    let targetJid = args[0];
+    
+    if (!targetJid.includes('@')) {
+      targetJid = targetJid.replace(/[^0-9]/g, '');
+      targetJid = `${targetJid}@s.whatsapp.net`;
+    }
 
-  const success = await db.addAccess(targetJid);
+    const success = await db.addAccess(targetJid);
 
-  if (success) {
-    await sock.sendMessage(jid, {
-      text: `✅ Access granted to: ${targetJid}\n\nUser can now use admin commands (if they are group admin).`,
-    });
-  } else {
-    await sock.sendMessage(jid, {
-      text: '❌ Failed to grant access. Database might not be configured.',
-    });
+    const responseText = success
+      ? `✅ Access granted to: ${targetJid}\n\nUser can now use akses commands.`
+      : '❌ Failed to grant access. Database might not be configured.';
+
+    await sock.sendMessage(jid, { text: responseText });
+  } catch (error) {
+    console.error('❌ Error in addakses command:', error);
+    try {
+      await sock.sendMessage(jid, {
+        text: '❌ Error executing command. Please try again.',
+      });
+    } catch {
+      // Silent fail if can't send error message
+    }
   }
 };
 

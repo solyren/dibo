@@ -7,7 +7,7 @@ const execute = async (sock: WASocket, msg: any, _args: string[]): Promise<void>
   try {
     await sock.sendMessage(jid, { text: 'Pong! 🏓' });
   } catch (error) {
-    console.error('❌ Error sending ping:', error);
+    console.error('❌ Error in ping command:', error);
   }
 };
 

@@ -3,7 +3,7 @@ import type { BotConfig } from '../types';
 export const config: BotConfig = {
   usePairingCode: true,
   customPairingCode: 'DIBOBOTT',
-  prefix: '.',
+  prefix: '!',
   botName: 'Dibo Bot',
   ownerNumber: '62895351647550', // Nomor owner tanpa @ (contoh: 628123456789)
   redis: {
