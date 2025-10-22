@@ -15,7 +15,7 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
     }
 
     let targetJid = args[0];
-    
+
     if (!targetJid.includes('@')) {
       targetJid = targetJid.replace(/[^0-9]/g, '');
       targetJid = `${targetJid}@s.whatsapp.net`;

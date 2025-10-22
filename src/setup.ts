@@ -1,5 +1,5 @@
 import makeWASocket, { DisconnectReason, useMultiFileAuthState, fetchLatestBaileysVersion, makeInMemoryStore } from 'baileys-mod';
-import { Boom } from '@hapi/boom';
+import type { Boom } from '@hapi/boom';
 import pino from 'pino';
 import * as readline from 'readline';
 import { config } from './config';
@@ -67,7 +67,7 @@ const setupPairingCode = async (): Promise<void> => {
 
     if (connection === 'close') {
       const shouldReconnect = (lastDisconnect?.error as Boom)?.output?.statusCode !== DisconnectReason.loggedOut;
-      
+
       if (shouldReconnect) {
         console.log('Connection closed, trying to reconnect...');
         setupPairingCode();

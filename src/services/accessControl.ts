@@ -17,7 +17,7 @@ class AccessControlService {
     const isGroup = msg.key.remoteJid?.endsWith('@g.us');
 
     const isOwner = this.isOwner(userJid);
-    
+
     let isAdmin = false;
     if (isGroup) {
       isAdmin = await this.isGroupAdmin(msg);
@@ -39,11 +39,11 @@ class AccessControlService {
   async isGroupAdmin(msg: any): Promise<boolean> {
     try {
       const groupMetadata = await (msg as any)._sock?.groupMetadata?.(msg.key.remoteJid);
-      if (!groupMetadata) return false;
+      if (!groupMetadata) {return false;}
 
       const userJid = msg.key.participant || msg.key.remoteJid;
       const participant = groupMetadata.participants?.find((p: any) => p.id === userJid);
-      
+
       return participant?.admin === 'admin' || participant?.admin === 'superadmin';
     } catch (error) {
       console.error('❌ Error checking admin status:', error);

@@ -4,7 +4,7 @@ import type { Command } from '../../types';
 // -- execute --
 const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> => {
   const jid = msg.key.remoteJid;
-  
+
   try {
     const isGroup = jid?.endsWith('@g.us');
 

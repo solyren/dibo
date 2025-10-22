@@ -1,5 +1,5 @@
 import makeWASocket, { DisconnectReason, useMultiFileAuthState, fetchLatestBaileysVersion, makeInMemoryStore } from 'baileys-mod';
-import { Boom } from '@hapi/boom';
+import type { Boom } from '@hapi/boom';
 import pino from 'pino';
 import { handleCommand } from './handlers/commandHandler';
 import { db } from './services/database';
@@ -12,7 +12,7 @@ const store = makeInMemoryStore({
 // -- startBot --
 const startBot = async (): Promise<void> => {
   db.initialize();
-  
+
   const { state, saveCreds } = await useMultiFileAuthState('auth_info');
   const { version } = await fetchLatestBaileysVersion();
 
@@ -43,12 +43,12 @@ const startBot = async (): Promise<void> => {
     try {
       for (const msg of messages) {
         // Skip messages from bot itself
-        if (msg.key.fromMe) continue;
-        
+        if (msg.key.fromMe) {continue;}
+
         // Only process if there's actual message content (conversation or extended)
         const hasText = msg.message?.conversation || msg.message?.extendedTextMessage?.text;
-        if (!hasText) continue;
-        
+        if (!hasText) {continue;}
+
         await handleCommand(sock, msg);
       }
     } catch (error) {
@@ -61,7 +61,7 @@ const startBot = async (): Promise<void> => {
 
     if (connection === 'close') {
       const shouldReconnect = (lastDisconnect?.error as Boom)?.output?.statusCode !== DisconnectReason.loggedOut;
-      
+
       if (shouldReconnect) {
         console.log('Connection closed, reconnecting...');
         startBot();

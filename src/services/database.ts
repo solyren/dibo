@@ -26,8 +26,8 @@ class DatabaseService {
 
   // -- addAccess --
   async addAccess(userJid: string): Promise<boolean> {
-    if (!this.redis) return false;
-    
+    if (!this.redis) {return false;}
+
     try {
       await this.redis.sadd('bot:access:users', userJid);
       return true;
@@ -39,8 +39,8 @@ class DatabaseService {
 
   // -- removeAccess --
   async removeAccess(userJid: string): Promise<boolean> {
-    if (!this.redis) return false;
-    
+    if (!this.redis) {return false;}
+
     try {
       await this.redis.srem('bot:access:users', userJid);
       return true;
@@ -52,8 +52,8 @@ class DatabaseService {
 
   // -- hasAccess --
   async hasAccess(userJid: string): Promise<boolean> {
-    if (!this.redis) return false;
-    
+    if (!this.redis) {return false;}
+
     try {
       const result = await this.redis.sismember('bot:access:users', userJid);
       return result === 1;
@@ -65,8 +65,8 @@ class DatabaseService {
 
   // -- listAccess --
   async listAccess(): Promise<string[]> {
-    if (!this.redis) return [];
-    
+    if (!this.redis) {return [];}
+
     try {
       const users = await this.redis.smembers('bot:access:users');
       return users as string[];
