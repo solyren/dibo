@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.1.0](https://github.com/solyren/dibo/compare/dibo-v0.0.1...dibo-v0.1.0) (2025-10-24)
+
+
+### Features
+
+* **commands:** add button interaktif ke command listakses ([01b74f0](https://github.com/solyren/dibo/commit/01b74f0267037a4a5eb7399374f648acdf60e34c))
+* **commands:** add command kick ([5e93b7e](https://github.com/solyren/dibo/commit/5e93b7ee9a294d4c27868830f39be52d2a6374c5))
+
+
+### Docs
+
+* Add banner to README.md ([46c6e0c](https://github.com/solyren/dibo/commit/46c6e0cf9c6c7a832c38b03f10f4ee31453bec64))
+* **readme:** update dokumentasi ke lebih profesional ([ac1315d](https://github.com/solyren/dibo/commit/ac1315dabd496030f98ebd3a85c73440a90a86aa))
+
 ## 0.0.1 (2025-10-22)
 
 
