@@ -48,6 +48,18 @@ export interface BotMessages {
     hidetag: {
       usage: string;
     };
+    wachk: {
+      usage: string;
+      success: string;
+      notFound: string;
+    };
+    wabulk: {
+      usage: string;
+      noValidNumbers: string;
+      processing: string;
+      progress: string;
+      complete: string;
+    };
   };
 }
 

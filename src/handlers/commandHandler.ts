@@ -6,6 +6,8 @@ import { kickCommand } from '../commands/admin/kick';
 import { addaksesCommand } from '../commands/owner/addakses';
 import { removeaksesCommand } from '../commands/owner/removeakses';
 import { listaksesCommand } from '../commands/owner/listakses';
+import { wachkCommand } from '../commands/owner/wachk';
+import { wabulkCommand } from '../commands/owner/wabulk';
 import { config } from '../config';
 import { accessControl } from '../services/accessControl';
 
@@ -25,6 +27,8 @@ const registerCommands = (): void => {
   ownerCommands.set(addaksesCommand.name, addaksesCommand);
   ownerCommands.set(removeaksesCommand.name, removeaksesCommand);
   ownerCommands.set(listaksesCommand.name, listaksesCommand);
+  ownerCommands.set(wachkCommand.name, wachkCommand);
+  ownerCommands.set(wabulkCommand.name, wabulkCommand);
 };
 
 // -- getCommand --

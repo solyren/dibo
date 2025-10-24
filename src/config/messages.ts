@@ -40,5 +40,26 @@ export const messages: BotMessages = {
     hidetag: {
       usage: '❌ Usage: {prefix}hidetag <text>\n\nExample: {prefix}hidetag Hello everyone!',
     },
+    wachk: {
+      usage: '❌ Usage: {prefix}wachk <number>\n\nExample: {prefix}wachk 628123456789',
+      success: '📝 *WhatsApp Bio Info*\n\n👤 Number: {target}\n📄 Bio: {bio}\n📅 Set At: {date}',
+      notFound: '❌ Bio not found for {target}. Number might not exist or bio is empty.',
+    },
+    wabulk: {
+      usage: '❌ Usage: {prefix}wabulk <numbers>\n\n' +
+             'Option 1: Send .txt file containing numbers\n' +
+             'Option 2: Send list separated by newline/comma\n' +
+             'Option 3: Reply to message with numbers\n\n' +
+             'Example:\n{prefix}wabulk 628123456789,628987654321\n' +
+             'Or upload numbers.txt file',
+      noValidNumbers: '❌ No valid numbers found. Please provide at least one valid phone number (min 10 digits).',
+      processing: '⏳ Processing {total} numbers...\n\nThis may take a while. Please wait.',
+      progress: '📊 Progress: {current}/{total} numbers checked...',
+      complete: '✅ *Bulk Check Complete*\n\n' +
+                '📊 Total Checked: {total}\n' +
+                '✅ With Bio: {success}\n' +
+                '❌ No Bio/Private: {failed}\n\n' +
+                'Files are being sent...',
+    },
   },
 };
