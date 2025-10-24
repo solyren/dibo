@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/solyren/dibo/compare/dibo-v1.0.0...dibo-v1.1.0) (2025-10-24)
+
+
+### Features
+
+* **commands:** add wachk and wabulk for WhatsApp bio checking ([62e1ebf](https://github.com/solyren/dibo/commit/62e1ebfa885551bb7d8f382389f45ddc69135ab0))
+* **config:** add centralized message configuration system ([446692c](https://github.com/solyren/dibo/commit/446692ccedd38bf16297a49288387c6991959466))
+
 ## [1.0.0](https://github.com/solyren/dibo/compare/dibo-v0.1.0...dibo-v1.0.0) (2025-10-24)
 
 
