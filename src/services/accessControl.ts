@@ -53,27 +53,22 @@ class AccessControlService {
 
   // -- canExecuteCommand --
   canExecuteCommand(permissions: UserPermissions, commandRole: 'normal' | 'akses' | 'admin' | 'owner'): boolean {
-    // Owner can access everything
     if (permissions.isOwner) {
       return true;
     }
 
-    // Owner-only commands
     if (commandRole === 'owner') {
       return false;
     }
 
-    // Admin commands: need to be group admin AND have access
     if (commandRole === 'admin') {
       return permissions.isAdmin && permissions.hasAccess;
     }
 
-    // Akses commands: only need special access (no group admin required)
     if (commandRole === 'akses') {
       return permissions.hasAccess;
     }
 
-    // Normal commands: everyone can access
     return true;
   }
 }

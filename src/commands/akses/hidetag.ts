@@ -37,7 +37,6 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
         text: '❌ Failed to send hidetag. Make sure the bot is admin.',
       });
     } catch {
-      // Silent fail if can't send error message
     }
   }
 };

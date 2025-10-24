@@ -4,7 +4,6 @@ import pino from 'pino';
 import * as readline from 'readline';
 import { config } from './config';
 
-// -- Message store untuk caching --
 const store = makeInMemoryStore({
   logger: pino().child({ level: 'silent', stream: 'store' }),
 });
@@ -51,7 +50,6 @@ const setupPairingCode = async (): Promise<void> => {
     },
   });
 
-  // Bind store ke socket
   store.bind(sock.ev);
 
   if (config.usePairingCode && !sock.authState.creds.registered) {

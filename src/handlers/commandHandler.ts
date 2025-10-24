@@ -2,6 +2,7 @@ import type { WASocket } from 'baileys-mod';
 import type { Command } from '../types';
 import { pingCommand } from '../commands/normal/ping';
 import { hidetagCommand } from '../commands/akses/hidetag';
+import { kickCommand } from '../commands/admin/kick';
 import { addaksesCommand } from '../commands/owner/addakses';
 import { removeaksesCommand } from '../commands/owner/removeakses';
 import { listaksesCommand } from '../commands/owner/listakses';
@@ -18,6 +19,8 @@ const registerCommands = (): void => {
   normalCommands.set(pingCommand.name, pingCommand);
 
   aksesCommands.set(hidetagCommand.name, hidetagCommand);
+
+  adminCommands.set(kickCommand.name, kickCommand);
 
   ownerCommands.set(addaksesCommand.name, addaksesCommand);
   ownerCommands.set(removeaksesCommand.name, removeaksesCommand);

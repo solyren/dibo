@@ -18,7 +18,6 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
       return;
     }
 
-    // Parse page number from args or default to 1
     let page = 1;
     if (args.length > 0) {
       const parsedPage = parseInt(args[0], 10);
@@ -29,7 +28,6 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
 
     const totalPages = Math.ceil(users.length / USERS_PER_PAGE);
 
-    // Ensure page is within bounds
     if (page > totalPages) {
       page = totalPages;
     }
@@ -38,17 +36,14 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
     const endIndex = Math.min(startIndex + USERS_PER_PAGE, users.length);
     const pageUsers = users.slice(startIndex, endIndex);
 
-    // Build user list text
     const userList = pageUsers
       .map((user, index) => `${startIndex + index + 1}. ${user}`)
       .join('\n');
 
     const messageText = `📋 *Access List*\n\nUsers with special access:\n${userList}\n\n*Page ${page}/${totalPages}* • Total: ${users.length} user(s)`;
 
-    // Build interactive buttons
     const interactiveButtons = [];
 
-    // Add Previous button if not on first page
     if (page > 1) {
       interactiveButtons.push({
         name: 'quick_reply',
@@ -59,7 +54,6 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
       });
     }
 
-    // Add Refresh button
     interactiveButtons.push({
       name: 'quick_reply',
       buttonParamsJson: JSON.stringify({
@@ -68,7 +62,6 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
       }),
     });
 
-    // Add Next button if not on last page
     if (page < totalPages) {
       interactiveButtons.push({
         name: 'quick_reply',
@@ -79,7 +72,6 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
       });
     }
 
-    // Send interactive message with buttons
     const interactiveMessage = {
       text: messageText,
       footer: 'Click buttons to navigate',
@@ -94,7 +86,6 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
         text: '❌ Error executing command. Please try again.',
       });
     } catch {
-      // Silent fail if can't send error message
     }
   }
 };

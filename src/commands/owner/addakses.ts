@@ -35,7 +35,6 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
         text: '❌ Error executing command. Please try again.',
       });
     } catch {
-      // Silent fail if can't send error message
     }
   }
 };

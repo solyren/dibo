@@ -4,7 +4,6 @@ import pino from 'pino';
 import { handleCommand } from './handlers/commandHandler';
 import { db } from './services/database';
 
-// -- Message store untuk caching --
 const store = makeInMemoryStore({
   logger: pino().child({ level: 'silent', stream: 'store' }),
 });
@@ -34,7 +33,6 @@ const startBot = async (): Promise<void> => {
     },
   });
 
-  // Bind store ke socket untuk auto-sync messages
   store.bind(sock.ev);
 
   sock.ev.on('creds.update', saveCreds);
@@ -42,10 +40,8 @@ const startBot = async (): Promise<void> => {
   sock.ev.on('messages.upsert', async ({ messages }) => {
     try {
       for (const msg of messages) {
-        // Skip messages from bot itself
         if (msg.key.fromMe) {continue;}
 
-        // Handle interactive button response
         if (msg.message?.interactiveResponseMessage) {
           const buttonResponse = msg.message.interactiveResponseMessage;
           const buttonId = buttonResponse.nativeFlowResponseMessage?.paramsJson;
@@ -55,7 +51,6 @@ const startBot = async (): Promise<void> => {
               const parsedResponse = JSON.parse(buttonId);
               const commandText = parsedResponse.id;
 
-              // Create a synthetic message for command handling
               const syntheticMsg = {
                 ...msg,
                 message: {
@@ -71,7 +66,6 @@ const startBot = async (): Promise<void> => {
           continue;
         }
 
-        // Only process if there's actual message content (conversation or extended)
         const hasText = msg.message?.conversation || msg.message?.extendedTextMessage?.text;
         if (!hasText) {continue;}
 
