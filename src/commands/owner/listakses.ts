@@ -1,6 +1,8 @@
 import type { WASocket } from '@whiskeysockets/baileys';
 import type { Command } from '../../types';
 import { db } from '../../services/database';
+import { config } from '../../config';
+import { formatMessage } from '../../utils/formatMessage';
 
 const USERS_PER_PAGE = 5;
 
@@ -13,7 +15,7 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
 
     if (users.length === 0) {
       await sock.sendMessage(jid, {
-        text: '📋 *Access List*\n\nNo users with special access.',
+        text: config.messages.commands.listakses.empty,
       });
       return;
     }
@@ -40,7 +42,13 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
       .map((user, index) => `${startIndex + index + 1}. ${user}`)
       .join('\n');
 
-    const messageText = `📋 *Access List*\n\nUsers with special access:\n${userList}\n\n*Page ${page}/${totalPages}* • Total: ${users.length} user(s)`;
+    const messageText = `${config.messages.commands.listakses.title
+    }Users with special access:\n${userList}${
+      formatMessage(config.messages.commands.listakses.footer, {
+        current: page,
+        total: totalPages,
+        count: users.length,
+      })}`;
 
     const interactiveButtons = [];
 
@@ -48,7 +56,7 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
       interactiveButtons.push({
         name: 'quick_reply',
         buttonParamsJson: JSON.stringify({
-          display_text: '◀ Previous',
+          display_text: config.messages.commands.listakses.buttons.prev,
           id: `.listakses ${page - 1}`,
         }),
       });
@@ -66,7 +74,7 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
       interactiveButtons.push({
         name: 'quick_reply',
         buttonParamsJson: JSON.stringify({
-          display_text: 'Next ▶',
+          display_text: config.messages.commands.listakses.buttons.next,
           id: `.listakses ${page + 1}`,
         }),
       });
@@ -83,7 +91,7 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
     console.error('❌ Error in listakses command:', error);
     try {
       await sock.sendMessage(jid, {
-        text: '❌ Error executing command. Please try again.',
+        text: config.messages.errors.commandError,
       });
     } catch {
     }

@@ -86,18 +86,18 @@ export const handleCommand = async (sock: WASocket, msg: any): Promise<void> => 
       }
     } else {
       const jid = msg.key.remoteJid;
-      let errorMsg = '❌ You do not have permission to use this command.';
+      let errorMsg = config.messages.errors.noPermission;
 
       if (command.role === 'owner') {
-        errorMsg = '❌ This command is owner-only.';
+        errorMsg = config.messages.errors.ownerOnly;
       } else if (command.role === 'admin') {
         if (!permissions.isAdmin) {
-          errorMsg = '❌ You must be a group admin to use this command.';
+          errorMsg = config.messages.errors.needAdmin;
         } else if (!permissions.hasAccess) {
-          errorMsg = '❌ You need special access to use this command. Contact the owner.';
+          errorMsg = config.messages.errors.needAccess;
         }
       } else if (command.role === 'akses') {
-        errorMsg = '❌ You need special access to use this command. Contact the owner.';
+        errorMsg = config.messages.errors.needAccess;
       }
 
       await sock.sendMessage(jid, { text: errorMsg });

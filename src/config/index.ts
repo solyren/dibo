@@ -1,4 +1,5 @@
 import type { BotConfig } from '../types';
+import { messages } from './messages';
 
 export const config: BotConfig = {
   usePairingCode: true,
@@ -10,4 +11,5 @@ export const config: BotConfig = {
     url: process.env.UPSTASH_REDIS_REST_URL || '',
     token: process.env.UPSTASH_REDIS_REST_TOKEN || '',
   },
+  messages,
 };

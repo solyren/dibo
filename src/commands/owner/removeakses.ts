@@ -1,6 +1,8 @@
 import type { WASocket } from '@whiskeysockets/baileys';
 import type { Command } from '../../types';
 import { db } from '../../services/database';
+import { config } from '../../config';
+import { formatMessage } from '../../utils/formatMessage';
 
 // -- execute --
 const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> => {
@@ -9,7 +11,7 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
   try {
     if (args.length === 0) {
       await sock.sendMessage(jid, {
-        text: '❌ Usage: .removeakses <number>\n\nExample: .removeakses 628123456789',
+        text: formatMessage(config.messages.commands.removeakses.usage),
       });
       return;
     }
@@ -24,15 +26,15 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
     const success = await db.removeAccess(targetJid);
 
     const responseText = success
-      ? `✅ Access removed from: ${targetJid}\n\nUser can no longer use akses commands.`
-      : '❌ Failed to remove access. Database might not be configured.';
+      ? formatMessage(config.messages.commands.removeakses.success, { target: targetJid })
+      : config.messages.commands.removeakses.failed;
 
     await sock.sendMessage(jid, { text: responseText });
   } catch (error) {
     console.error('❌ Error in removeakses command:', error);
     try {
       await sock.sendMessage(jid, {
-        text: '❌ Error executing command. Please try again.',
+        text: config.messages.errors.commandError,
       });
     } catch {
     }

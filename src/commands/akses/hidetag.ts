@@ -1,5 +1,7 @@
 import type { WASocket } from '@whiskeysockets/baileys';
 import type { Command } from '../../types';
+import { config } from '../../config';
+import { formatMessage } from '../../utils/formatMessage';
 
 // -- execute --
 const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> => {
@@ -10,14 +12,14 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
 
     if (!isGroup) {
       await sock.sendMessage(jid, {
-        text: '❌ This command can only be used in groups.',
+        text: config.messages.errors.groupOnly,
       });
       return;
     }
 
     if (args.length === 0) {
       await sock.sendMessage(jid, {
-        text: '❌ Usage: .hidetag <message>\n\nExample: .hidetag Hello everyone!',
+        text: formatMessage(config.messages.commands.hidetag.usage),
       });
       return;
     }
@@ -34,7 +36,7 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
     console.error('❌ Error in hidetag command:', error);
     try {
       await sock.sendMessage(jid, {
-        text: '❌ Failed to send hidetag. Make sure the bot is admin.',
+        text: config.messages.errors.commandError,
       });
     } catch {
     }

@@ -1,5 +1,7 @@
 import type { WASocket } from '@whiskeysockets/baileys';
 import type { Command } from '../../types';
+import { config } from '../../config';
+import { formatMessage } from '../../utils/formatMessage';
 
 // -- execute --
 const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> => {
@@ -10,14 +12,14 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
 
     if (!isGroup) {
       await sock.sendMessage(jid, {
-        text: '❌ This command can only be used in groups.',
+        text: config.messages.errors.groupOnly,
       });
       return;
     }
 
     if (args.length === 0) {
       await sock.sendMessage(jid, {
-        text: '❌ Usage: !kick <number>\n\nExample: !kick 628123456789\nOr tag a user to kick them.',
+        text: formatMessage(config.messages.commands.kick.usage),
       });
       return;
     }
@@ -36,13 +38,13 @@ const execute = async (sock: WASocket, msg: any, args: string[]): Promise<void> 
     await sock.groupParticipantsUpdate(jid, [targetJid], 'remove');
 
     await sock.sendMessage(jid, {
-      text: `✅ User ${targetJid.split('@')[0]} has been kicked from the group.`,
+      text: formatMessage(config.messages.commands.kick.success, { target: targetJid.split('@')[0] }),
     });
   } catch (error) {
     console.error('❌ Error in kick command:', error);
     try {
       await sock.sendMessage(jid, {
-        text: '❌ Failed to kick user. Make sure the bot is admin and the target is not an admin.',
+        text: config.messages.commands.kick.failed,
       });
     } catch {
     }
