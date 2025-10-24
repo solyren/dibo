@@ -14,16 +14,24 @@ class AccessControlService {
   // -- getUserPermissions --
   async getUserPermissions(msg: any): Promise<UserPermissions> {
     const userJid = msg.key.participant || msg.key.remoteJid;
+    const userPnJid = msg.key.participantPn || msg.key.remoteJid;
     const isGroup = msg.key.remoteJid?.endsWith('@g.us');
 
-    const isOwner = this.isOwner(userJid);
+    console.log('🔍 Access Check - userJid:', userJid);
+    console.log('🔍 Access Check - userPnJid:', userPnJid);
+    console.log('🔍 Access Check - configOwner:', config.ownerNumber);
+
+    const isOwner = this.isOwner(userJid) || this.isOwner(userPnJid);
+    console.log('🔍 Access Check - isOwner:', isOwner);
 
     let isAdmin = false;
     if (isGroup) {
       isAdmin = await this.isGroupAdmin(msg);
+      console.log('🔍 Access Check - isAdmin:', isAdmin);
     }
 
-    const hasAccess = await db.hasAccess(userJid);
+    const hasAccess = await db.hasAccess(userJid) || await db.hasAccess(userPnJid);
+    console.log('🔍 Access Check - hasAccess:', hasAccess);
 
     return { isOwner, isAdmin, hasAccess };
   }
@@ -42,7 +50,11 @@ class AccessControlService {
       if (!groupMetadata) {return false;}
 
       const userJid = msg.key.participant || msg.key.remoteJid;
-      const participant = groupMetadata.participants?.find((p: any) => p.id === userJid);
+      const userPnJid = msg.key.participantPn;
+
+      const participant = groupMetadata.participants?.find((p: any) => {
+        return p.id === userJid || p.id === userPnJid || p.pn === userPnJid;
+      });
 
       return participant?.admin === 'admin' || participant?.admin === 'superadmin';
     } catch (error) {

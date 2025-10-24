@@ -1,4 +1,4 @@
-import type { WASocket } from 'baileys-mod';
+import type { WASocket } from '@whiskeysockets/baileys';
 
 export type CommandRole = 'normal' | 'akses' | 'admin' | 'owner';
 

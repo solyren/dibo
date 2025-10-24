@@ -26,13 +26,13 @@
   "dependencies": {
     "@types/node": "^24.9.1",
     "@upstash/redis": "^1.35.6",
-    "baileys-mod": "^6.8.5",
+    "@whiskeysockets/baileys": "^6.7.8",
     "cheerio": "^1.1.2",
     "form-data": "^4.0.4",
     "glob-parent": "^6.0.2",
-    "jimp": "^0.16.13",
-    "libsignal": "^2.0.1",
+    "jimp": "^1.6.0",
+    "node-cache": "^5.1.2",
     "pino": "^10.1.0"
   },
-  "version": "0.1.0"
+  "version": "0.0.2"
 }

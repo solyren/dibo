@@ -1,4 +1,4 @@
-import type { WASocket } from 'baileys-mod';
+import type { WASocket } from '@whiskeysockets/baileys';
 import type { Command } from '../types';
 import { pingCommand } from '../commands/normal/ping';
 import { hidetagCommand } from '../commands/akses/hidetag';
@@ -41,21 +41,49 @@ const getCommand = (commandName: string): Command | undefined => {
 export const handleCommand = async (sock: WASocket, msg: any): Promise<void> => {
   try {
     const text = msg.message?.conversation || msg.message?.extendedTextMessage?.text;
-    if (!text || !text.startsWith(config.prefix)) {return;}
+    console.log('🔍 handleCommand called with text:', text);
+    console.log('🔧 Prefix configured as:', config.prefix);
+
+    if (!text || !text.startsWith(config.prefix)) {
+      console.log('⚠️  Text does not start with prefix, ignoring');
+      return;
+    }
 
     const args = text.slice(config.prefix.length).trim().split(/ +/);
     const commandName = args.shift()?.toLowerCase();
-    if (!commandName) {return;}
+    console.log('📛 Command name:', commandName);
+    console.log('📦 Args:', args);
+
+    if (!commandName) {
+      console.log('⚠️  No command name found');
+      return;
+    }
 
     const command = getCommand(commandName);
-    if (!command) {return;}
+    console.log('🔎 Command found:', command ? command.name : 'NOT FOUND');
+
+    if (!command) {
+      console.log('⚠️  Command not registered');
+      return;
+    }
 
     msg._sock = sock;
     const permissions = await accessControl.getUserPermissions(msg);
+    console.log('🔐 Permissions:', permissions);
+    console.log('👤 Command role:', command.role);
+
     const canExecute = accessControl.canExecuteCommand(permissions, command.role);
+    console.log('✅ Can execute?', canExecute);
 
     if (canExecute) {
-      await command.execute(sock, msg, args);
+      console.log('🎯 Executing command:', command.name);
+      try {
+        await command.execute(sock, msg, args);
+        console.log('✅ Command executed successfully');
+      } catch (execError) {
+        console.error('❌ Error executing command:', execError);
+        throw execError;
+      }
     } else {
       const jid = msg.key.remoteJid;
       let errorMsg = '❌ You do not have permission to use this command.';

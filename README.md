@@ -8,7 +8,7 @@
 
 Production-ready WhatsApp bot with 4-level role system and Redis-powered access control.
 
-![Version](https://img.shields.io/badge/version-0.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-0.0.2-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Bun](https://img.shields.io/badge/Bun-%3E%3D1.2.22-orange.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)
@@ -26,8 +26,9 @@ Production-ready WhatsApp bot with 4-level role system and Redis-powered access 
 ## Tech Stack
 
 - **Runtime**: Bun v1.2.22+
+- **Package Manager**: npm
 - **Language**: TypeScript 5+ (strict mode)
-- **WhatsApp API**: baileys-mod v6.8.5
+- **WhatsApp API**: @whiskeysockets/baileys v6.7.8
 - **Database**: Upstash Redis v1.35.6
 
 ## Installation
@@ -44,7 +45,7 @@ Production-ready WhatsApp bot with 4-level role system and Redis-powered access 
    ```bash
    git clone https://github.com/solyren/dibo.git
    cd dibo
-   bun install
+   npm install
    ```
 
 2. Configure environment:
@@ -65,14 +66,14 @@ Production-ready WhatsApp bot with 4-level role system and Redis-powered access 
 
 5. Setup WhatsApp connection:
    ```bash
-   bun setup
+   npm run setup
    # Enter phone number and scan pairing code in WhatsApp
    ```
 
 6. Run the bot:
    ```bash
-   bun start          # Production
-   bun run dev        # Development (auto-reload)
+   npm start          # Production
+   npm run dev        # Development (auto-reload)
    ```
 
 ## Role System
@@ -133,11 +134,11 @@ dibo/
 ### Scripts
 
 ```bash
-bun start         # Run bot (production)
-bun run dev       # Run with auto-reload
-bun setup         # Generate pairing code
-bun run lint      # Check code style
-bun run lint:fix  # Auto-fix linting issues
+npm start         # Run bot (production)
+npm run dev       # Run with auto-reload
+npm run setup     # Generate pairing code
+npm run lint      # Check code style
+npm run lint:fix  # Auto-fix linting issues
 ```
 
 ## Troubleshooting
@@ -166,7 +167,7 @@ bun run lint:fix  # Auto-fix linting issues
 
 1. Fork the repository
 2. Create feature branch: `git checkout -b feature/name`
-3. Make changes and test: `bun run lint`
+3. Make changes and test: `npm run lint`
 4. Update README.md if adding features
 5. Commit: `git commit -m "feat: description"`
 6. Push and create Pull Request

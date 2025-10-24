@@ -1,4 +1,4 @@
-import type { WASocket } from 'baileys-mod';
+import type { WASocket } from '@whiskeysockets/baileys';
 import type { Command } from '../../types';
 
 // -- execute --
