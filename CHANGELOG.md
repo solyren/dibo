@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.0](https://github.com/solyren/dibo/compare/dibo-v0.1.0...dibo-v1.0.0) (2025-10-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* **package:** Mengubah package bailey-mod ke bailey bawaan (whiskey) agar lebih teroptimize dan terupdate
+
+### Features
+
+* **package:** Migration of the bailey-mod package to whiskey-baileys ([daaa0d9](https://github.com/solyren/dibo/commit/daaa0d9a1c11b48e99ad218437075c6cefd8233e))
+
 ## [0.1.0](https://github.com/solyren/dibo/compare/dibo-v0.0.1...dibo-v0.1.0) (2025-10-24)
 
 
